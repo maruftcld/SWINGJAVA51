@@ -36,7 +36,7 @@ public class FlowLayoutExample {
         jf.add(jb1);
         jf.add(jb2);
         jf.add(jb3);
-        jf.add(jb4);
+        jf.add(jb4); 
         jf.add(jb5);
        
     }
