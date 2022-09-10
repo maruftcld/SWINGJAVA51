@@ -91,7 +91,7 @@ public class EditEmployee extends javax.swing.JFrame {
         _remarks.setRows(5);
         jScrollPane1.setViewportView(_remarks);
 
-        createEmployee.setText("Create Employee");
+        createEmployee.setText("Update Employee");
         createEmployee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createEmployeeActionPerformed(evt);
@@ -145,7 +145,7 @@ public class EditEmployee extends javax.swing.JFrame {
                     .addComponent(_address, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addComponent(jButton1)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,6 +193,10 @@ public class EditEmployee extends javax.swing.JFrame {
 
     private void createEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createEmployeeActionPerformed
         // TODO add your handling code here:
+        updateEmployee(empID.getText());
+    }//GEN-LAST:event_createEmployeeActionPerformed
+
+    void updateEmployee(String code){
         String name = _name.getText();
         String gender = null;
         if(_male.isSelected()){
@@ -216,7 +220,7 @@ public class EditEmployee extends javax.swing.JFrame {
         //String output = name + "\n" + gender + "\n" + education + "\n" + address + "\n" + remarks;
         //JOptionPane.showMessageDialog(createEmployee, output);
         
-        String sql = "insert into emp (name, gender, education, address, remarks) values (?, ?, ?, ?, ?)";
+        String sql = "update emp set name = ? , gender = ?, education = ?, address = ?, remarks = ? where code = ?";
         
         try {
             Connection con = DatabaseConnection.getDBConnection();
@@ -226,36 +230,52 @@ public class EditEmployee extends javax.swing.JFrame {
             psmt.setString(3, education);
             psmt.setString(4, address);
             psmt.setString(5, remarks);
+            psmt.setString(6, code);
             int status = psmt.executeUpdate();
             JOptionPane.showMessageDialog(createEmployee, status);
  
         } catch (Exception e) {
             System.out.println(e);
         }
-    }//GEN-LAST:event_createEmployeeActionPerformed
-
+    
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String employeeID = empID.getText();
-        System.out.println(employeeID);
+       String employeeID = empID.getText();
+        editEmployee(employeeID);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    void editEmployee(String code){
         String sql = "select * from emp where code = ?";
         
         try {
             Connection con = DatabaseConnection.getDBConnection();
             PreparedStatement psmt = con.prepareStatement(sql);
-            psmt.setString(1, employeeID);
+            psmt.setString(1, code);
             ResultSet rs = psmt.executeQuery();
             if(rs.next()){
                 _name.setText(rs.getString("name"));
+                if(rs.getString("gender").equals("Male")){
+                    _male.setSelected(true);
+                }else{
+                    _female.setSelected(true);
+                }
+
+                _address.setSelectedItem(rs.getString("address"));
+                _remarks.setText(rs.getString("remarks"));
+                
+                
             }else{
                 JOptionPane.showMessageDialog(createEmployee, "Employee code doesn't match");
             }
+            
+            setVisible(true);
         } catch (Exception e) {
             System.out.println(e);
         }
         
-    }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    }
     /**
      * @param args the command line arguments
      */
