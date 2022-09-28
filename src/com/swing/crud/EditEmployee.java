@@ -246,6 +246,7 @@ public class EditEmployee extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     void editEmployee(String code){
+        empID.setText(code);
         String sql = "select * from emp where code = ?";
         
         try {

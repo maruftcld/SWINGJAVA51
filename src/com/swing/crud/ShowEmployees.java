@@ -9,6 +9,7 @@ import com.swing.util.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -144,6 +145,7 @@ public class ShowEmployees extends javax.swing.JFrame {
               Connection con = DatabaseConnection.getDBConnection();
               Statement stmt = con.createStatement();
               ResultSet rs = stmt.executeQuery(sql);
+              
              
               while(rs.next()){
                   //Object[] rowdata = {rs.getString("")}; 
@@ -184,10 +186,9 @@ public class ShowEmployees extends javax.swing.JFrame {
          int rowCount = empTable.getSelectedRow();
         
         Object eObj = empTable.getValueAt(rowCount, 1);
-        new EditEmployee().editEmployee(eObj.toString());
+        
         EditEmployee editemp = new EditEmployee();
-        editemp.getComponent(1);
-        System.out.println(eObj.toString());
+        editemp.editEmployee(eObj.toString());
         
     }//GEN-LAST:event_btnEditActionPerformed
 
